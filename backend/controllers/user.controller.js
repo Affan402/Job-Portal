@@ -73,9 +73,13 @@ export const logout = async (req, res) => {
 export const updateProfile = async (req, res) => {
     try {
         const { fullname, email, phoneNumber, bio, skills } = req.body;
+        const file = req.file;
         if (!fullname || !email || !phoneNumber || !bio || !skills) {
             return res.status(400).json({message: "All field are required", success: false});
         }
+
+        //cloudnary will be added here...
+
         const skillsArray = skills.split(",");
         const userId = req.id; //middleware authentication
         if (!userId) {
@@ -88,6 +92,18 @@ export const updateProfile = async (req, res) => {
         user.profile.bio = bio;
         user.profile.skills = skillsArray;
 
+        await user.save();
+
+        //resume will be added here...
+
+        user = {
+            _id: user._id,
+            fullname: user.fullname,
+            email: user.email,
+            phoneNumber: user.phoneNumber,
+            role: user.role
+        }
+        return res.status(200).json({message: "Profile update successfully", user, success: true});
     } catch (error) {
         console.log(error);
     }
