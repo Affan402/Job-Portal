@@ -10,7 +10,7 @@ export const isAuthenticated = async (req, res, next) => {
         if(!decode) {
             return res.status(401).json({message: "Unauthorized access", success: false});
         }
-        req.id = decode.userID;
+        req.id = decode.userId;
         next();
     } catch (error) {
         console.log(error);
