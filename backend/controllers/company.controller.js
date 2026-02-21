@@ -24,7 +24,7 @@ export const companyRegister = async(req, res) =>{
 export const getCompany = async(req, res) => {
     try {
         const userId = req.id; //logged in user id from middleware
-        const companies = await Company.find({userId});
+        const companies = await Company.find({userID: userId});
         if(!companies) {
             return res.status(404).json({message: "No companies found", success: false});
         }
