@@ -16,16 +16,16 @@ const Footer = () => {
             </div>
             {/* Social Icons */}
             <div className="flex gap-4 mt-2">
-              <a href="#" className="p-2 bg-white rounded-full shadow-sm hover:text-[#6A38C2] hover:shadow-md transition-all">
+              <a href="#" className="p-2 bg-black text-white rounded-full shadow-sm hover:bg-black/90 transition-all">
                 <Facebook size={20} />
               </a>
-              <a href="#" className="p-2 bg-white rounded-full shadow-sm hover:text-[#6A38C2] hover:shadow-md transition-all">
+              <a href="#" className="p-2 bg-black text-white rounded-full shadow-sm hover:bg-black/90 transition-all">
                 <Twitter size={20} />
               </a>
-              <a href="#" className="p-2 bg-white rounded-full shadow-sm hover:text-[#6A38C2] hover:shadow-md transition-all">
+              <a href="#" className="p-2 bg-black text-white rounded-full shadow-sm hover:bg-black/90 transition-all">
                 <Linkedin size={20} />
               </a>
-              <a href="#" className="p-2 bg-white rounded-full shadow-sm hover:text-[#6A38C2] hover:shadow-md transition-all">
+              <a href="#" className="p-2 bg-black text-white rounded-full shadow-sm hover:bg-black/90 transition-all">
                 <Instagram size={20} />
               </a>
             </div>
