@@ -72,3 +72,28 @@ export const getApplicants = async (req, res) => {
         console.log(error);
     }
 }
+
+export const updateStatus = async (req, res) => { 
+    try {
+        const {status} = req.body; //pending, accepted, rejected
+        const applicationId = req.params.id;
+        if (!status || !applicationId) {
+            return res.status(400).json({message: "Status and application ID are required", success: false});
+        }
+
+        //find the application by applicant id
+        const application = await Application.findOne({_id:applicationId});
+        if (!application) {
+            return res.status(404).json({message: "Application not found", success: false});
+        };
+
+        //update the status of the application
+        application.status = status.toLowerCase();
+
+        await application.save();
+        return res.status(200).json({message: "Application status updated successfully", success: true});
+        
+    } catch (error) {
+        console.log(error);
+    }
+}
