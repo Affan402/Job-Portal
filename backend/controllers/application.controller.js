@@ -36,7 +36,7 @@ export const applyJob = async (req, res) => {
 export const getAppliedJobs = async (req, res) => {
     try {
         const userId = req.id; //from middleware
-        const application = await Application.find({applicant: userId}).sort({createdAt: -1 }).pouplate({
+        const application = await Application.find({applicant: userId}).sort({createdAt: -1 }).populate({
             path: "job",
             options: {sort: {createdAt: -1}},
             populate: {
