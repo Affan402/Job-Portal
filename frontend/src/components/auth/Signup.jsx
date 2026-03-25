@@ -80,11 +80,12 @@ const Signup = () => {
                     </div>
                     <div className='my-2'>
                         <Label>Phone Number</Label>
-                        <Input type="number"
+                        <Input type="tel"
                             value={input.phoneNumber}
                             name="phoneNumber"
                             onChange={changeEventHandler}
-                            placeholder='+92x-xxxxxxxx'></Input>
+                            placeholder='+92x-xxxxxxxx'
+                            pattern="^(\+92|0)3[0-9]{9}$"></Input>
                     </div>
                     <div className='my-2'>
                         <Label>Password</Label>
