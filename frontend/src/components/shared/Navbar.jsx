@@ -4,9 +4,12 @@ import { Link, Links, NavLink } from 'react-router-dom'
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { useSelector } from 'react-redux';
+import store from '@/redux/store';
 
 const Navbar = () => {
-  const user = false;
+  const {user} = useSelector(store => store.auth);
+
   return (
     <div className='bg-white'>
       <div className='flex items-center justify-between mx-auto max-w-7xl h-16 gap-4 px-4 md:px-8'>
@@ -45,7 +48,7 @@ const Navbar = () => {
                   <div className='flex flex-col  text-gray-600 w-fit items-start my-2'>
                     <div className='flex items-center'>
                       <User2 />
-                      <Button className="cursor-pointer" variant="link">View Profile</Button>
+                      <Button className="cursor-pointer" variant="link"><Link to="/profile">View Profile</Link></Button>
                     </div>
                     <div className='flex items-center'>
                       <LogIn />
