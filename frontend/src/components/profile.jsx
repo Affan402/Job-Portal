@@ -42,7 +42,7 @@ const Profile = () => {
               </p>
             </div>
           </div>
-          <Button onClick={() => setOpen(!open)} className="text-right" variant="outline">
+          <Button onClick={() => setOpen(true)} className="text-right" variant="outline">
             <Pen />
           </Button>
         </div>
