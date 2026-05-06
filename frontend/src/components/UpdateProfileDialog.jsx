@@ -9,8 +9,11 @@ import {
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Loader2 } from "lucide-react";
+import axios from "axios";
+import { USER_API_END_POINT } from "@/utils/constant";
+import { toast } from "sonner";
 
 const UpdateProfileDialog = ({ open, setOpen }) => {
   const [loading, setLoading] = useState(false);
@@ -24,6 +27,8 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
     file: ""  
   })
 
+  const dispatch = useDispatch();
+
   const changeEventHandler = (e) => {
     setInput({...input, [e.target.name]:e.target.value});
   }
@@ -33,8 +38,35 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
     setInput({...input, file});
   }
   
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
+    const formData = new FormData();
+    formData.append("fullname", input.fullname);
+    formData.append("email", input.email);
+    formData.append("phoneNumber", input.phoneNumber);
+    formData.append("bio", input.bio);
+    formData.append("skills", input.skills);
+    if (input.file) {
+      formData.append("file", input.file);
+    }
+
+    try {
+      const res = await axios.post(`${USER_API_END_POINT}/profile/update`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        },
+        withCredentials: true
+      });
+      if(res.data.success) {
+        dispatch(setUser(res.data.user));
+        toast.success(res.data.message);     
+      }
+      
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message || "Something went wrong");
+    }
+
     console.log(input);
   }
 
