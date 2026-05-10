@@ -54,7 +54,8 @@ export const login = async (req, res) => {
             fullname: user.fullname,
             email: user.email,
             phoneNumber: user.phoneNumber,
-            role: user.role
+            role: user.role,
+            profile: user.profile
         }
         return res.status(200).cookie("token", token, {httpOnly: true, maxAge: 24*60*60*1000}).json({message: `Welcome back ${user.fullname}`,user, success: true});
     } catch (error) {
@@ -90,6 +91,8 @@ export const updateProfile = async (req, res) => {
             return res.status(404).json({message: "User not found", success: false});
         }
 
+        user.profile = user.profile || {};
+
         if (fullname) user.fullname = fullname;
         if (email) user.email = email;
         if (phoneNumber) user.phoneNumber = phoneNumber;
@@ -105,7 +108,8 @@ export const updateProfile = async (req, res) => {
             fullname: user.fullname,
             email: user.email,
             phoneNumber: user.phoneNumber,
-            role: user.role
+            role: user.role,
+            profile: user.profile
         }
         return res.status(200).json({message: "Profile update successfully", user, success: true});
     } catch (error) {

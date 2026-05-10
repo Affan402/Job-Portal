@@ -14,6 +14,7 @@ import { Loader2 } from "lucide-react";
 import axios from "axios";
 import { USER_API_END_POINT } from "@/utils/constant";
 import { toast } from "sonner";
+import { setAuthUser } from "@/redux/authSlice";
 
 const UpdateProfileDialog = ({ open, setOpen }) => {
   const [loading, setLoading] = useState(false);
@@ -58,7 +59,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
         withCredentials: true
       });
       if(res.data.success) {
-        dispatch(setUser(res.data.user));
+        dispatch(setAuthUser(res.data.user));
         toast.success(res.data.message);     
       }
       
@@ -66,7 +67,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
       console.log(error);
       toast.error(error.response.data.message || "Something went wrong");
     }
-
+    setOpen(false);
     console.log(input);
   }
 
