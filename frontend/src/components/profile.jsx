@@ -23,7 +23,7 @@ const Profile = () => {
           <div className="flex items-center gap-4">
             <Avatar className="h-24 w-24">
               <AvatarImage
-                src="https://static.dezeen.com/uploads/2025/05/sq-google-g-logo-update_dezeen_2364_col_0.jpg"
+                src={user?.profile?.profilePhoto}
                 alt="profile"
               />
             </Avatar>

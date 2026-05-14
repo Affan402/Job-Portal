@@ -10,6 +10,11 @@ export const register = async (req, res) => {
         if (!fullname || !email || !phoneNumber || !password || !role) {
             return res.status(400).json({message: "All field are required", success: false});
         }
+        const file = req.file;
+        const fileUri = getDataUri(file);
+        const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+
+
         const userExists = await User.findOne({email});
         if (userExists) {
             return res.status(409).json({message: "User already exists", success: false});
@@ -20,7 +25,10 @@ export const register = async (req, res) => {
             email, 
             phoneNumber, 
             password: hashedPassword, 
-            role    
+            role,
+            profile:{
+                profilePhoto: cloudResponse.secure_url,
+            }
         })
         res.status(201).json({message: "User registered successfully", success: true});
     } catch (error) {
