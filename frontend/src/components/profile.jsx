@@ -62,13 +62,14 @@ const Profile = () => {
         </div>
         <div className="grid w-full max-w-sm items-center gap-1.5">
           <Label className="text-md font-bold">Resume</Label>
-          {isResume ? (
+          {user?.profile?.resume ? (
             <a
-              href="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
+              href={`https://drive.google.com/viewerng/viewer?url=${encodeURIComponent(user.profile.resume)}&embedded=true`}
               target="_blank"
+              rel="noopener noreferrer"
               className="text-blue-500 underline"
             >
-              View Resume
+              {user?.profile?.resumeOriginalName || "View Resume"}
             </a>
           ) : (
             <span>No resume uploaded</span>
