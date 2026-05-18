@@ -1,18 +1,52 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Badge } from './ui/badge'
 import { Button } from './ui/button'
+import { useParams } from 'react-router-dom';
+import { setSingleJob } from '@/redux/jobSlice';
+import { JOB_API_END_POINT } from '@/utils/constant';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
 
 const JobDescription = () => {
   const isApplied = false;
+  const params = useParams();
+  const jobId = params.id;
+  const {singleJob} = useSelector(state => state.job);
+  const {user} = useSelector(state => state.auth);
+  const dispatch = useDispatch();
+  
+  useEffect(() => {
+      dispatch(setSingleJob(null));
+        const fetchSingleJob = async () => {
+            try {
+                const res = await axios.get(`${JOB_API_END_POINT}/get/${jobId}`);
+                if (res.data.success) {
+                    dispatch(setSingleJob(res.data.job));
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        fetchSingleJob();
+    }, [jobId, dispatch, user?._id]);
+
+  if (!singleJob) {
+    return (
+      <div className='max-w-7xl mx-auto my-10 px-4 md:px-8'>
+        <h1 className='text-lg font-medium'>Loading job details...</h1>
+      </div>
+    );
+  }
+
   return (
     <div className='max-w-7xl mx-auto my-10 px-4 md:px-8'>
       <div className='flex items-center justify-between'>
         <div>
-          <h1 className='text-xl font-bold'>Frontend Developer</h1>
+          <h1 className='text-xl font-bold'>{singleJob.title}</h1>
           <div className='flex items-center gap-4 mt-4'>
-            <Badge className={'text-blue-700 font-bold'} variant="ghost">12 Positions</Badge>
-            <Badge className={'text-[#F83002] font-bold'} variant="ghost">Part Time</Badge>
-            <Badge className={'text-[#7209b7] font-bold'} variant="ghost">24 LPA</Badge>
+            <Badge className={'text-blue-700 font-bold'} variant="ghost">{singleJob.position} Positions</Badge>
+            <Badge className={'text-[#F83002] font-bold'} variant="ghost">{singleJob.jobType}</Badge>
+            <Badge className={'text-[#7209b7] font-bold'} variant="ghost">{singleJob.salary} LPA</Badge>
           </div>
         </div>
         <Button className={`${isApplied ? 'cursor-not-allowed': 'cursor-pointer'} rounded-lg bg-[#7209b7] hover:bg-[#5a0790] text-white`} onClick={() => {}} disabled={isApplied}>
@@ -21,13 +55,13 @@ const JobDescription = () => {
       </div>
       <h1 className='border-b-2 border-b-gray-300 font-medium py-4'>Job Description</h1>
       <div className='my-4'>
-        <h1 className='font-bold my-1'>Role: <span className='pl-4 font-normal text-gray-800'>Frontend Developer</span></h1>
-        <h1 className='font-bold my-1'>location: <span className='pl-4 font-normal text-gray-800'>Karachi</span></h1>
-        <h1 className='font-bold my-1'>Description: <span className='pl-4 font-normal text-gray-800'>Responsible for developing user-facing features using React and modern JavaScript.</span></h1>
-        <h1 className='font-bold my-1'>Experience: <span className='pl-4 font-normal text-gray-800'>2+ years of experience in frontend development.</span></h1>
-        <h1 className='font-bold my-1'>Salary: <span className='pl-4 font-normal text-gray-800'>24 LPA</span></h1>
-        <h1 className='font-bold my-1'>Total Applicants: <span className='pl-4 font-normal text-gray-800'>50</span></h1>
-        <h1 className='font-bold my-1'>Posted Date: <span className='pl-4 font-normal text-gray-800'>2023-10-01</span></h1>
+        <h1 className='font-bold my-1'>Role: <span className='pl-4 font-normal text-gray-800'>{singleJob.title}</span></h1>
+        <h1 className='font-bold my-1'>location: <span className='pl-4 font-normal text-gray-800'>{singleJob.location}</span></h1>
+        <h1 className='font-bold my-1'>Description: <span className='pl-4 font-normal text-gray-800'>{singleJob.description}</span></h1>
+        <h1 className='font-bold my-1'>Experience: <span className='pl-4 font-normal text-gray-800'>{singleJob.experienceLevel ?? singleJob.experience}</span></h1>
+        <h1 className='font-bold my-1'>Salary: <span className='pl-4 font-normal text-gray-800'>{singleJob.salary} LPA</span></h1>
+        <h1 className='font-bold my-1'>Total Applicants: <span className='pl-4 font-normal text-gray-800'>{singleJob?.applications?.length}</span></h1>
+        <h1 className='font-bold my-1'>Posted Date: <span className='pl-4 font-normal text-gray-800'>{singleJob.createdAt?.split('T')[0]}</span></h1>
       </div>
     </div>
   )
