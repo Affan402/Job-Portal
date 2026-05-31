@@ -15,6 +15,8 @@ const Navbar = () => {
   const {user} = useSelector(store => store.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const avatarSrc = user?.profile?.profilePhoto || "";
+  const avatarFallback = user?.fullname?.charAt(0)?.toUpperCase() || "U";
 
   const logoutHandler = async () => {
     try {
@@ -37,9 +39,20 @@ const Navbar = () => {
         </div>
         <div className='flex items-center gap-12'>
           <ul className='flex font-medium items-center gap-5'>
-            <li> <Link to="/">Home</Link></li>
-            <li> <Link to="/jobs">Jobs</Link></li>
-            <li> <Link to="/browse">Browse</Link></li>
+            {
+              user && user.role == 'recruiter' ? (
+                <>
+                  <li> <Link to="/admin/companies">Companies</Link></li>
+                  <li> <Link to="/admin/jobs">Jobs</Link></li>
+                </>
+              ) : (
+                <>
+                  <li> <Link to="/">Home</Link></li>
+                  <li> <Link to="/jobs">Jobs</Link></li>
+                  <li> <Link to="/browse">Browse</Link></li>
+                </>
+              )
+            } 
           </ul>
           {
             !user ? (
@@ -51,13 +64,15 @@ const Navbar = () => {
               <Popover>
                 <PopoverTrigger asChild>
                   <Avatar className="cursor-pointer">
-                    <AvatarImage src={user?.profile?.profilePhoto} />
+                    <AvatarImage src={avatarSrc} alt={user?.fullname || "User profile"} className="object-cover" />
+                    <AvatarFallback>{avatarFallback}</AvatarFallback>
                   </Avatar>
                 </PopoverTrigger>
                 <PopoverContent className='w-80'>
                   <div className='flex gap-4 space-y-2'>
                     <Avatar className="cursor-pointer">
-                      <AvatarImage src={user?.profile?.profilePhoto} />
+                      <AvatarImage src={avatarSrc} alt={user?.fullname || "User profile"} className="object-cover" />
+                      <AvatarFallback>{avatarFallback}</AvatarFallback>
                     </Avatar>
                     <div>
                       <h4 className='font-medium'>{user?.fullname}</h4>
@@ -65,10 +80,15 @@ const Navbar = () => {
                     </div>
                   </div>
                   <div className='flex flex-col  text-gray-600 w-fit items-start my-2'>
-                    <div className='flex items-center'>
-                      <User2 />
-                      <Button className="cursor-pointer" variant="link"><Link to="/profile">View Profile</Link></Button>
-                    </div>
+                      {
+                        user && user.role === 'student' && (
+                        <div className='flex items-center'>
+                          <User2 />
+                          <Button className="cursor-pointer" variant="link"><Link to="/profile">View Profile</Link></Button>
+                        </div>
+                         ) 
+                      }
+                    
                     <div className='flex items-center'>
                       <LogIn />
                       <Button className="cursor-pointer" onClick={logoutHandler} variant="link">Logout</Button>

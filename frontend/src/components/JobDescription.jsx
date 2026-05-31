@@ -3,18 +3,38 @@ import { Badge } from './ui/badge'
 import { Button } from './ui/button'
 import { useParams } from 'react-router-dom';
 import { setSingleJob } from '@/redux/jobSlice';
-import { JOB_API_END_POINT } from '@/utils/constant';
+import { APPLICATION_API_END_POINT, JOB_API_END_POINT } from '@/utils/constant';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
+import { toast } from 'sonner';
 
 const JobDescription = () => {
-  const isApplied = false;
   const params = useParams();
   const jobId = params.id;
   const {singleJob} = useSelector(state => state.job);
   const {user} = useSelector(state => state.auth);
   const dispatch = useDispatch();
-  
+  const isApplied = Boolean(
+    user?._id && singleJob?.applications?.some(application => {
+      const applicantId = application?.applicant?._id ?? application?.applicant;
+      return applicantId == user._id;
+    })
+  );
+
+  const applyJobHandler = async () => {
+    try {
+      const res = await axios.post(`${APPLICATION_API_END_POINT}/apply/${jobId}`, {}, {withCredentials: true});
+      if (res.data.success) {
+        const updatedSingleJob = {...singleJob, applications:[...singleJob.applications,{applicant:user?._id}]} 
+        dispatch(setSingleJob(updatedSingleJob)); //update the job in the store 
+        toast.success(res.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response?.data?.message || "Failed to apply");
+    }
+  }
+
   useEffect(() => {
       dispatch(setSingleJob(null));
         const fetchSingleJob = async () => {
@@ -49,7 +69,7 @@ const JobDescription = () => {
             <Badge className={'text-[#7209b7] font-bold'} variant="ghost">{singleJob.salary} LPA</Badge>
           </div>
         </div>
-        <Button className={`${isApplied ? 'cursor-not-allowed': 'cursor-pointer'} rounded-lg bg-[#7209b7] hover:bg-[#5a0790] text-white`} onClick={() => {}} disabled={isApplied}>
+        <Button onClick={applyJobHandler} className={`${isApplied ? 'cursor-not-allowed': 'cursor-pointer'} rounded-lg bg-[#7209b7] hover:bg-[#5a0790] text-white`} disabled={isApplied}>
           {isApplied ? 'Already Applied' : 'Apply Now'}
         </Button>
       </div>
