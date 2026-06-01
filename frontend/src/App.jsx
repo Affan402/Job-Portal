@@ -11,6 +11,7 @@ import JobDescription from './components/JobDescription';
 import RouteErrorPage from './components/RouteErrorPage';
 import NotFoundPage from './components/NotFoundPage';
 import Companies from './components/admin/Companies';
+import CompanyCreate from './components/admin/CompanyCreate';
 
 const AppLayout = () => (
   <>
@@ -60,7 +61,11 @@ const appRouter = createBrowserRouter([
       {
         path: 'admin/companies',
         element: <Companies />
-      }
+      },
+      {
+        path: 'admin/companies/create',
+        element: <CompanyCreate />
+      },
     ]
   },
 ]
