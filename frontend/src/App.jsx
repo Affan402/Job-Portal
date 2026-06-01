@@ -10,6 +10,7 @@ import Profile from './components/profile';
 import JobDescription from './components/JobDescription';
 import RouteErrorPage from './components/RouteErrorPage';
 import NotFoundPage from './components/NotFoundPage';
+import Companies from './components/admin/Companies';
 
 const AppLayout = () => (
   <>
@@ -54,6 +55,11 @@ const appRouter = createBrowserRouter([
       {
         path: '*',
         element: <NotFoundPage />
+      },
+      //admin routes
+      {
+        path: 'admin/companies',
+        element: <Companies />
       }
     ]
   },
