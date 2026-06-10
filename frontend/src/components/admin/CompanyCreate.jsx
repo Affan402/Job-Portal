@@ -6,6 +6,9 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setLoading } from "@/redux/authSlice";
 import { toast } from "sonner";
+import { setSingleCompany } from "@/redux/companySlice";
+import { COMPANY_API_END_POINT } from "@/utils/constant";
+import axios from "axios";
 
 const CompanyCreate = () => {
   const navigate = useNavigate();
@@ -21,12 +24,13 @@ const CompanyCreate = () => {
         { withCredentials: true }, // include cookies if backend uses them
       );
       if (res.data.success) {
+        dispatch(setSingleCompany(res.data.company)); // Store the new company in Redux
         toast.success(res.data.message);
         const companyId = res?.data?.company?._id; // Assuming backend returns the new company's ID
         navigate(`/admin/companies/${companyId}`); // Redirect to the new company's page
       }
-    } catch (err) {
-      toast .error(err.response?.data?.message || "Something went wrong");
+    } catch (error) {
+      console.log(error);
     } finally {
       dispatch(setLoading(false));
     }

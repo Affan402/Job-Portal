@@ -11,6 +11,7 @@ import {
 } from "redux-persist";
 import authSlice from "./authSlice";
 import jobSlice from "./jobSlice";
+import companySlice from "./companySlice";
 
 const persistConfig = {
     key: "auth",
@@ -23,6 +24,7 @@ const store = configureStore({
     reducer: {
         auth: persistedAuthReducer,
         job: jobSlice,
+        company: companySlice,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
