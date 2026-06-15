@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Table,
   TableCaption,
@@ -27,8 +27,14 @@ import { setcompanies } from "@/redux/companySlice";
 import Companies from "./Companies";
 
 const CompaniesTable = () => {
-  const { companies } = useSelector((store) => store.company);
-  // Example data — replace with real data or props
+  const { companies, searchCompanyByText } = useSelector((store) => store.company);
+  
+  const filterCompanies = useMemo(() => {
+    return companies.filter((c) => {
+      if (!searchCompanyByText) return true;
+      return c.name.toLowerCase().includes(searchCompanyByText.toLowerCase());
+    })
+  }, [companies, searchCompanyByText]);
 
   const [editingCompany, setEditingCompany] = useState(null);
   const [form, setForm] = useState({ name: "", logo: "" });
@@ -67,7 +73,7 @@ const CompaniesTable = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {companies?.length <= 0 ? (
+          {filterCompanies?.length <= 0 ? (
             <TableRow>
               <TableCell colSpan={4} className="text-center text-gray-500">
                 No companies found. Please create a company first.
@@ -75,7 +81,7 @@ const CompaniesTable = () => {
             </TableRow>
           ) : (
             <>
-              {companies?.map((c) => {
+              {filterCompanies?.map((c) => {
                 return (
                     <TableRow key={c.id}> 
                     <TableCell>
